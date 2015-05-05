@@ -99,7 +99,7 @@ class MontyEncoder(json.JSONEncoder):
                 return {"@module": "numpy",
                         "@class": "array",
                         "dtype": o.dtype.__str__(),
-                        "data": o.tolist()}
+                        "data": o.tostring()}
             elif isinstance(o, np.generic):
                 return o.item()
 
@@ -150,7 +150,7 @@ class MontyDecoder(json.JSONDecoder):
                                                         "%Y-%m-%d %H:%M:%S")
                     return dt
                 elif modname == "numpy" and classname == "array":
-                    return np.array(d["data"], dtype=d["dtype"])
+                    return np.fromstring(d["data"], dtype=d["dtype"])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
